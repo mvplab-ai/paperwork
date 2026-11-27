@@ -1,0 +1,8 @@
+{
+  "name": "paperwork",
+  "description": "Explains everyday letters, bills, contracts and forms in plain words, and helps you act on them.",
+  "version": "0.1.0",
+  "author": { "name": "Paperwork contributors" },
+  "license": "MIT",
+  "keywords": ["skills", "paperwork", "letters", "bills", "contracts", "forms", "plain-language"]
+}

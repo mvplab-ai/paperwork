@@ -1,0 +1,22 @@
+GAS SERRANO NORTE, S.A.
+Factura de gas natural
+N.º de contrato: 55-20418-7        Fecha de emisión: 19 de noviembre de 2026
+Periodo de facturación: del 15 de octubre de 2026 al 14 de noviembre de 2026
+
+Sra. C. Ejemplo, Calle Ficticia 8, 2.º B
+
+Detalle de la factura
+
+  Término fijo (31 días)                               8,40 €
+  Término variable (consumo: 620 kWh)                 40,30 €
+  Alquiler de contador                                 2,00 €
+  Impuestos (IVA 21 %)                                10,65 €
+
+  TOTAL A PAGAR                                       61,35 €
+
+Fecha límite de pago: 9 de diciembre de 2026
+
+Si no se recibe el pago antes de la fecha límite, se aplicará un recargo del 5 % y podrá
+suspenderse el suministro.
+
+Atención al cliente: 900 555 014

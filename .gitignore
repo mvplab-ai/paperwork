@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+tests/out/
+dist/
+.superpowers/
+.DS_Store

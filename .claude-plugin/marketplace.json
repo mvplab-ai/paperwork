@@ -1,0 +1,14 @@
+{
+  "name": "paperwork",
+  "description": "A free skill for everyday paperwork.",
+  "owner": { "name": "Paperwork contributors" },
+  "plugins": [
+    {
+      "name": "paperwork",
+      "description": "Explains everyday letters, bills, contracts and forms in plain words, and helps you act on them.",
+      "version": "0.1.0",
+      "source": "./",
+      "author": { "name": "Paperwork contributors" }
+    }
+  ]
+}
