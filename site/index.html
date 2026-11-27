@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Paperwork: plain answers for letters, bills, contracts and forms</title>
+    <meta
+      name="description"
+      content="A free skill for your AI assistant. Show it a letter, bill, contract or form and it tells you what it says, what you have to do, and by when."
+    />
+    <meta property="og:title" content="Paperwork" />
+    <meta
+      property="og:description"
+      content="Show your AI assistant a letter, bill, contract or form. Get back what it says, what you have to do, and by when. Free and open source."
+    />
+    <meta property="og:image" content="https://raw.githubusercontent.com/mvplab-ai/paperwork/main/assets/demo.gif" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;800&family=EB+Garamond:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #fbfaf6;
+        --sheet: #ffffff;
+        --ink: #16150f;
+        --soft: #5d5a4f;
+        --rule: #d8d4c6;
+        --marker: #ffe14d;
+        --stamp: #b93a16;
+        --kraft: #e6dcc3;
+        --ui: "Public Sans", system-ui, sans-serif;
+        --letter: "EB Garamond", Georgia, serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--ui);
+        font-size: 1.1875rem;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: inherit;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 3px;
+      }
+      a:hover {
+        text-decoration-color: var(--stamp);
+      }
+      :focus-visible {
+        outline: 3px solid var(--ink);
+        outline-offset: 3px;
+      }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .narrow {
+        max-width: 42rem;
+      }
+
+      header.top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 26px 0 0;
+      }
+      .name {
+        font-weight: 700;
+        font-size: 1.375rem;
+        text-decoration: none;
+      }
+      .top nav a {
+        margin-left: 22px;
+        font-size: 1.0625rem;
+      }
+
+      /* hero */
+      .hero {
+        padding: 54px 0 30px;
+      }
+      h1 {
+        font-size: clamp(2.5rem, 6.2vw, 4.75rem);
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+        font-weight: 800;
+        margin: 0 0 22px;
+        max-width: 14em;
+      }
+      .mark {
+        background: linear-gradient(var(--marker), var(--marker)) no-repeat 0 62% / 100% 78%;
+        padding: 0 0.12em;
+        margin: 0 -0.12em;
+      }
+      .lede {
+        font-size: 1.4375rem;
+        max-width: 34rem;
+        margin: 0 0 30px;
+      }
+      .btn {
+        font: inherit;
+        font-weight: 700;
+        display: inline-block;
+        background: var(--ink);
+        color: var(--paper);
+        border: 2px solid var(--ink);
+        padding: 14px 24px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .btn:hover {
+        background: var(--stamp);
+        border-color: var(--stamp);
+      }
+      .btn.quiet {
+        background: transparent;
+        color: var(--ink);
+      }
+      .btn.quiet:hover {
+        background: var(--marker);
+        border-color: var(--ink);
+      }
+      .free {
+        display: inline-block;
+        margin-left: 16px;
+        color: var(--soft);
+        font-size: 1.0625rem;
+      }
+
+      /* the live letter */
+      .desk {
+        background: var(--kraft);
+        margin-top: 44px;
+        padding: 40px 0 48px;
+      }
+      .ask {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 26px;
+      }
+      .ask span {
+        font-weight: 700;
+        margin-right: 6px;
+      }
+      .ask button {
+        font: inherit;
+        background: var(--sheet);
+        color: var(--ink);
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        padding: 8px 18px;
+        cursor: pointer;
+      }
+      .ask button[aria-pressed="true"] {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+        gap: 40px;
+        align-items: start;
+      }
+      .sheet {
+        background: var(--sheet);
+        font-family: var(--letter);
+        font-size: 1.25rem;
+        line-height: 1.5;
+        padding: 34px 36px 30px;
+        box-shadow: 0 1px 0 rgba(22, 21, 15, 0.25), 0 18px 34px -18px rgba(70, 52, 10, 0.45);
+        transform: rotate(-0.8deg);
+      }
+      .sheet .org {
+        font-family: var(--ui);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+      .sheet .date {
+        color: var(--soft);
+        font-size: 1.0625rem;
+        margin-bottom: 20px;
+      }
+      .sheet h2 {
+        font-family: var(--ui);
+        font-size: 1.0625rem;
+        letter-spacing: 0.06em;
+        margin: 0 0 12px;
+      }
+      .sheet p {
+        margin: 0 0 12px;
+      }
+      .sheet .f {
+        background: linear-gradient(var(--marker), var(--marker)) no-repeat 0 60% / 0% 80%;
+        transition: background-size 0.45s ease;
+        padding: 0 3px;
+        margin: 0 -3px;
+      }
+      .sheet .f.on {
+        background-size: 100% 80%;
+      }
+      .reply {
+        min-height: 26rem;
+      }
+      .reply dl {
+        margin: 0;
+      }
+      .reply dt {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        color: var(--stamp);
+        margin-top: 18px;
+      }
+      .reply dt:first-child {
+        margin-top: 0;
+      }
+      .reply dd {
+        margin: 2px 0 0;
+        font-size: 1.25rem;
+      }
+      .reply .note {
+        margin-top: 22px;
+        font-size: 1.0625rem;
+        color: var(--soft);
+      }
+
+      section {
+        padding: 64px 0 0;
+      }
+      h2.h {
+        font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+        line-height: 1.1;
+        letter-spacing: -0.015em;
+        margin: 0 0 18px;
+      }
+      section p {
+        margin: 0 0 16px;
+      }
+
+      /* try it */
+      ol.steps {
+        list-style: none;
+        counter-reset: s;
+        margin: 26px 0 0;
+        padding: 0;
+        max-width: 46rem;
+      }
+      ol.steps > li {
+        counter-increment: s;
+        position: relative;
+        padding: 0 0 30px 60px;
+      }
+      ol.steps > li::before {
+        content: counter(s);
+        position: absolute;
+        left: 0;
+        top: -4px;
+        width: 40px;
+        height: 40px;
+        border: 2px solid var(--ink);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+      }
+      ol.steps strong {
+        display: block;
+        font-size: 1.3125rem;
+        margin-bottom: 6px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        margin-top: 12px;
+      }
+      #copied {
+        font-weight: 700;
+      }
+
+      /* asks */
+      table.asks {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 56rem;
+        margin-top: 10px;
+      }
+      table.asks th,
+      table.asks td {
+        text-align: left;
+        vertical-align: top;
+        padding: 16px 0;
+        border-top: 1px solid var(--rule);
+      }
+      table.asks th {
+        width: 44%;
+        padding-right: 24px;
+        font-size: 1.25rem;
+      }
+      table.asks tr:last-child th,
+      table.asks tr:last-child td {
+        border-bottom: 1px solid var(--rule);
+      }
+
+      /* limits */
+      .limits {
+        border-left: 6px solid var(--stamp);
+        padding: 4px 0 4px 26px;
+        max-width: 44rem;
+      }
+      .limits ul,
+      .wont ul {
+        margin: 0;
+        padding-left: 1.1em;
+      }
+      .limits li,
+      .wont li {
+        margin-bottom: 12px;
+      }
+
+      footer {
+        margin-top: 80px;
+        border-top: 1px solid var(--rule);
+        padding: 28px 0 60px;
+        color: var(--soft);
+        font-size: 1.0625rem;
+      }
+      footer a {
+        margin-right: 20px;
+      }
+
+      @media (max-width: 860px) {
+        .pair {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+        .sheet {
+          transform: none;
+          padding: 26px 22px;
+        }
+        .reply {
+          min-height: 0;
+        }
+        table.asks th,
+        table.asks td {
+          display: block;
+          width: auto;
+          padding: 14px 0 0;
+        }
+        table.asks td {
+          border-top: 0;
+          padding: 4px 0 14px;
+        }
+        .top nav a:first-child {
+          display: none;
+        }
+        .free {
+          display: block;
+          margin: 12px 0 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        .sheet .f {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="top">
+        <a class="name" href="#top" id="top">Paperwork</a>
+        <nav>
+          <a href="#limits">What it won't do</a>
+          <a href="https://github.com/mvplab-ai/paperwork">GitHub</a>
+        </nav>
+      </header>
+
+      <div class="hero">
+        <h1>Find out what that letter <span class="mark">wants from you.</span></h1>
+        <p class="lede">
+          Show your AI assistant a letter, bill, contract or form. Paperwork makes it tell you,
+          in plain words, what it says, what you have to do, and by when.
+        </p>
+        <a class="btn" href="#try">Try it in one minute</a>
+        <span class="free">Free. No account. Works with the assistant you already use.</span>
+      </div>
+    </div>
+
+    <div class="desk">
+      <div class="wrap">
+        <div class="ask" role="group" aria-label="Choose a question to ask about the letter">
+          <span>Ask about this letter:</span>
+          <button type="button" data-q="what" aria-pressed="true">What is this?</button>
+          <button type="button" data-q="when" aria-pressed="false">When is it due?</button>
+          <button type="button" data-q="cant" aria-pressed="false">What if I can't pay?</button>
+        </div>
+        <div class="pair">
+          <div class="sheet" aria-label="An example letter">
+            <div class="org">NORTHFIELD WATER</div>
+            <div class="date">Customer Accounts, 20 November 2026</div>
+            <h2>FINAL REMINDER</h2>
+            <p>
+              Our records show that your water bill for the period 1 March 2026 to 31 May 2026
+              has not been paid.
+            </p>
+            <p>Amount now due: <span class="f" data-f="amount">&pound;84.20</span></p>
+            <p>
+              Please pay the full amount by <span class="f" data-f="date">14 December 2026</span>.
+            </p>
+            <p>
+              If we do not receive payment by this date,
+              <span class="f" data-f="fee">a late payment fee of &pound;15.00 will be added</span>
+              and the debt may be passed to a collection agency.
+            </p>
+            <p>
+              If you are finding it hard to pay, call us.
+              <span class="f" data-f="plan">We can set up a payment plan.</span>
+            </p>
+          </div>
+          <div class="reply" id="reply" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <section id="try">
+        <h2 class="h">Try it in one minute</h2>
+        <p class="narrow">
+          Paperwork is a guide your assistant reads before it answers. You don't install
+          anything. You paste it into a chat.
+        </p>
+        <ol class="steps">
+          <li>
+            <strong>Copy the guide</strong>
+            It's a page of plain text. You don't need to read it.
+            <div class="row">
+              <button class="btn" type="button" id="copy">Copy the guide</button>
+              <span id="copied" role="status"></span>
+            </div>
+          </li>
+          <li>
+            <strong>Paste it into a new chat</strong>
+            Open the assistant you use and paste it as your first message.
+            <div class="row">
+              <a class="btn quiet" href="https://claude.ai/new" target="_blank" rel="noopener">Open Claude</a>
+              <a class="btn quiet" href="https://chatgpt.com/" target="_blank" rel="noopener">Open ChatGPT</a>
+              <a class="btn quiet" href="https://gemini.google.com/app" target="_blank" rel="noopener">Open Gemini</a>
+            </div>
+          </li>
+          <li>
+            <strong>Share your document and ask</strong>
+            Send a photo, attach the file, or paste the text. Cover account and ID numbers
+            first if you can. Then ask your question, such as "What is this?"
+          </li>
+        </ol>
+        <p class="narrow">
+          Tested with Claude so far. Other assistants should work the same way, but nobody has
+          checked them yet. Want it installed for good?
+          <a href="https://github.com/mvplab-ai/paperwork#install-it-properly">See the other ways to add it.</a>
+        </p>
+      </section>
+
+      <section>
+        <h2 class="h">What you can ask</h2>
+        <table class="asks">
+          <tr>
+            <th scope="row">"What is this?"</th>
+            <td>What it is, who sent it, what they want, by when, and any signs it's a scam.</td>
+          </tr>
+          <tr>
+            <th scope="row">"Is this bill right?"</th>
+            <td>Each charge explained, anything charged twice or that doesn't add up, and what to ask them.</td>
+          </tr>
+          <tr>
+            <th scope="row">"This is wrong, help me fight it."</th>
+            <td>Your strongest honest case, what proof to gather, and a letter ready to send.</td>
+          </tr>
+          <tr>
+            <th scope="row">"Should I sign this?"</th>
+            <td>What it really costs, how you get out, and the terms to push back on.</td>
+          </tr>
+          <tr>
+            <th scope="row">"Help me fill this in."</th>
+            <td>Each box explained, and what to put based on what you've told it.</td>
+          </tr>
+          <tr>
+            <th scope="row">"I have a pile of these."</th>
+            <td>One list, most urgent first, with the one thing each needs.</td>
+          </tr>
+        </table>
+        <p style="margin-top: 20px">
+          <a href="https://github.com/mvplab-ai/paperwork/blob/main/docs/examples.md">Read a real answer to each of these.</a>
+        </p>
+      </section>
+
+      <section class="wont">
+        <h2 class="h">Where it stops, on purpose</h2>
+        <ul class="narrow">
+          <li>
+            It's not a lawyer, an accountant or a doctor. For court papers, eviction and
+            immigration it explains the paper and the deadline, then points you to free
+            qualified help. It's written to refuse to draft your legal response.
+          </li>
+          <li>It won't work out your tax figures or tell you which box to tick on a visa form.</li>
+          <li>It won't send anything. Letters it writes are drafts for you to check and send.</li>
+          <li>It won't add something untrue to a letter to help you win.</li>
+        </ul>
+      </section>
+
+      <section id="limits">
+        <h2 class="h">Known limits</h2>
+        <div class="limits">
+          <ul>
+            <li>
+              <strong>It can be wrong.</strong> Check every date and amount against the paper
+              in your hand before you act.
+            </li>
+            <li>
+              <strong>Don't use it in Codex for court papers.</strong> There, asked to write a
+              defence, it offers to draft one once you give it the facts. In Claude it declines.
+            </li>
+            <li>
+              <strong>Real photos aren't tested yet.</strong> The tests so far use typed text.
+            </li>
+            <li>
+              <strong>It reports scam warning signs. It can't confirm a letter is genuine.</strong>
+            </li>
+          </ul>
+        </div>
+        <p class="narrow" style="margin-top: 22px">
+          Your documents go to your assistant and nowhere else. Paperwork has no server and
+          collects nothing.
+          <a href="https://github.com/mvplab-ai/paperwork/blob/main/docs/how-it-works.md">How it works and how it's tested.</a>
+        </p>
+      </section>
+
+      <footer>
+        <a href="https://github.com/mvplab-ai/paperwork">Source on GitHub</a>
+        <a href="https://github.com/mvplab-ai/paperwork/blob/main/docs/faq.md">Questions</a>
+        <a href="https://github.com/mvplab-ai/paperwork/issues">Report a bad answer</a>
+        <div style="margin-top: 14px">Free and open source under the MIT licence. The letter above is invented.</div>
+      </footer>
+    </div>
+
+    <script>
+      // Each answer is shortened from what the skill really gave for this letter and question.
+      var ANSWERS = {
+        what: {
+          marks: ["amount", "date", "fee", "plan"],
+          blocks: [
+            ["WHAT THIS IS", "A final reminder from Northfield Water about an unpaid bill."],
+            ["WHAT THEY WANT", "£84.20, for water from 1 March to 31 May 2026."],
+            ["BY WHEN", "14 December 2026."],
+            ["IF YOU DO NOTHING", "A £15.00 late fee is added and the debt may go to a collection agency."],
+            ["WHAT I'D DO", "1. Check whether you have already paid. 2. Can't pay it all? Call them about a payment plan."],
+          ],
+        },
+        when: {
+          marks: ["amount", "date", "fee"],
+          blocks: [
+            ["", "Pay £84.20 by 14 December 2026. That is the date the letter gives for paying the full amount."],
+            ["AFTER THAT", "The letter says a £15.00 late fee is added and the debt may be passed to a collection agency."],
+          ],
+        },
+        cant: {
+          marks: ["plan", "date", "fee"],
+          blocks: [
+            ["", "Call Northfield Water before the deadline. The letter says they can set up a payment plan."],
+            ["THE DEADLINE", "14 December 2026, for the full £84.20."],
+            ["WHAT I'D DO", "1. Phone them well before then and say you can't pay it all at once. 2. Ask for the plan in writing."],
+            ["NOT SURE ABOUT", "The letter doesn't say what a plan would look like, or whether agreeing one stops the £15.00 fee."],
+          ],
+        },
+      };
+      var reply = document.getElementById("reply");
+      var buttons = document.querySelectorAll(".ask button");
+      var facts = document.querySelectorAll(".sheet .f");
+
+      function show(key) {
+        var a = ANSWERS[key];
+        var dl = document.createElement("dl");
+        a.blocks.forEach(function (b) {
+          if (b[0]) {
+            var dt = document.createElement("dt");
+            dt.textContent = b[0];
+            dl.appendChild(dt);
+          }
+          var dd = document.createElement("dd");
+          dd.textContent = b[1];
+          dl.appendChild(dd);
+        });
+        var note = document.createElement("p");
+        note.className = "note";
+        note.textContent = "Every fact comes from the letter. The highlighted lines are where.";
+        reply.replaceChildren(dl, note);
+        facts.forEach(function (f) {
+          f.classList.toggle("on", a.marks.indexOf(f.dataset.f) !== -1);
+        });
+        buttons.forEach(function (b) {
+          b.setAttribute("aria-pressed", String(b.dataset.q === key));
+        });
+      }
+      buttons.forEach(function (b) {
+        b.addEventListener("click", function () {
+          show(b.dataset.q);
+        });
+      });
+      show("what");
+
+      var copyBtn = document.getElementById("copy");
+      var copied = document.getElementById("copied");
+      copyBtn.addEventListener("click", function () {
+        copied.textContent = "Copying…";
+        fetch("paperwork-paste-in.txt")
+          .then(function (r) {
+            if (!r.ok) throw new Error("not found");
+            return r.text();
+          })
+          .then(function (text) {
+            return navigator.clipboard.writeText(text);
+          })
+          .then(function () {
+            copied.textContent = "Copied. Now paste it into a new chat.";
+          })
+          .catch(function () {
+            copied.innerHTML =
+              'Couldn\'t copy from here. <a href="paperwork-paste-in.txt">Open the guide</a>, select all, and copy.';
+          });
+      });
+    </script>
+  </body>
+</html>

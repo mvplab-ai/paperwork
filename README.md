@@ -3,6 +3,8 @@
 **Show your AI assistant a letter, bill, contract or form. Get back, in plain words, what it
 says, what you have to do, and by when.**
 
+**[Try it on the website](https://mvplab-ai.github.io/paperwork/)**: click through a live example and copy the guide in one step.
+
 Paperwork is a free skill: a small set of instructions you add to the AI assistant you
 already use. It needs no account, no key and no payment of its own.
 

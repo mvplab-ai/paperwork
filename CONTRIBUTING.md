@@ -27,6 +27,7 @@ tests/selfcheck.json           known-wrong replies the grader must reject
 tests/run.py                   runs the cases through a headless agent and grades them
 tests/MANUAL.md                the hand check before each release, and known issues
 demo/                          source of the README demo (a HyperFrames project)
+site/                          the landing page, deployed to GitHub Pages on every push
 docs/superpowers/              the original design and build plan
 ```
 
