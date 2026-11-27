@@ -4,3 +4,6 @@ tests/out/
 dist/
 .superpowers/
 .DS_Store
+demo/node_modules/
+demo/.hyperframes/
+demo/renders/

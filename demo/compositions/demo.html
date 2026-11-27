@@ -1,0 +1,307 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #f3eee4;
+      color: #1c1a17;
+      font-family: Inter, sans-serif;
+    }
+    #demo-brand {
+      position: absolute;
+      left: 96px;
+      top: 58px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    #demo-brand span {
+      color: #c8451f;
+    }
+
+    /* the letter */
+    #demo-letter {
+      position: absolute;
+      left: 96px;
+      top: 150px;
+      width: 760px;
+      height: 840px;
+    }
+    #demo-sheet {
+      width: 100%;
+      height: 100%;
+      background: #fffdf8;
+      border-radius: 6px;
+      box-shadow: 0 30px 60px rgba(60, 40, 10, 0.18), 0 2px 6px rgba(60, 40, 10, 0.12);
+      padding: 54px 58px;
+      font-family: "EB Garamond", serif;
+      font-size: 30px;
+      line-height: 1.42;
+    }
+    #demo-sheet .org {
+      font-family: Inter, sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      letter-spacing: 0.06em;
+    }
+    #demo-sheet .meta {
+      font-size: 28px;
+      color: #6d665c;
+      margin-top: 4px;
+    }
+    #demo-sheet .head {
+      font-family: Inter, sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      margin: 30px 0 18px;
+    }
+    #demo-sheet p {
+      margin-bottom: 20px;
+    }
+    #demo-sheet .hl {
+      background-image: linear-gradient(#ffe27a, #ffe27a);
+      background-repeat: no-repeat;
+      background-position: 0 60%;
+      background-size: 0% 82%;
+      padding: 0 4px;
+      margin: 0 -4px;
+    }
+
+    /* the conversation */
+    #demo-chat {
+      position: absolute;
+      left: 950px;
+      top: 150px;
+      width: 874px;
+      height: 840px;
+    }
+    #demo-ask {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: #1c1a17;
+      color: #fffdf8;
+      font-size: 36px;
+      font-weight: 700;
+      padding: 20px 34px;
+      border-radius: 34px 34px 8px 34px;
+    }
+    #demo-answer {
+      position: absolute;
+      left: 0;
+      top: 118px;
+      width: 874px;
+    }
+    .demo-block {
+      margin-bottom: 26px;
+    }
+    .demo-block .lab {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      color: #c8451f;
+      margin-bottom: 6px;
+    }
+    .demo-block .txt {
+      font-size: 33px;
+      line-height: 1.3;
+    }
+    #demo-proof {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 34px;
+      font-weight: 700;
+      background: #ffe27a;
+      padding: 8px 18px;
+      border-radius: 6px;
+    }
+    .demo-block .txt b {
+      font-weight: 700;
+    }
+
+    /* end card */
+    #demo-end {
+      position: absolute;
+      inset: 0;
+    }
+    #demo-end-inner {
+      position: absolute;
+      inset: 0;
+      background: #1c1a17;
+      color: #fffdf8;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 150px;
+    }
+    #demo-end-name {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 700;
+      font-size: 44px;
+      color: #ffe27a;
+      margin-bottom: 30px;
+    }
+    #demo-end-line {
+      font-size: 92px;
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      max-width: 1500px;
+    }
+    #demo-end-sub {
+      font-size: 40px;
+      margin-top: 40px;
+      color: #cfc8ba;
+    }
+    #demo-end-url {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 34px;
+      margin-top: 60px;
+      color: #fffdf8;
+    }
+  </style>
+
+  <div id="root" data-composition-id="demo" data-width="1920" data-height="1080">
+    <div id="demo-brand" class="clip" data-start="0" data-duration="12.6" data-track-index="2">
+      paperwork<span>.</span>
+    </div>
+
+    <div id="demo-letter" class="clip" data-start="0" data-duration="12.6" data-track-index="3">
+      <div id="demo-sheet">
+        <div class="org">NORTHFIELD WATER</div>
+        <div class="meta">Customer Accounts &middot; 20 November 2026</div>
+        <div class="head">FINAL REMINDER</div>
+        <p>
+          Our records show that your water bill for the period 1 March 2026 to 31 May 2026 has
+          not been paid.
+        </p>
+        <p>Amount now due: <span class="hl" id="demo-hl-amount">&pound;84.20</span></p>
+        <p>
+          Please pay the full amount by
+          <span class="hl" id="demo-hl-date">14 December 2026</span>.
+        </p>
+        <p>
+          If we do not receive payment by this date,
+          <span class="hl" id="demo-hl-fee"
+            >a late payment fee of &pound;15.00 will be added</span
+          >
+          and the debt may be passed to a collection agency.
+        </p>
+        <p>
+          If you are finding it hard to pay, call us.
+          <span class="hl" id="demo-hl-plan">We can set up a payment plan.</span>
+        </p>
+      </div>
+    </div>
+
+    <div id="demo-chat" class="clip" data-start="0" data-duration="12.6" data-track-index="4">
+      <div id="demo-ask">What is this?</div>
+      <div id="demo-answer">
+        <div class="demo-block" id="demo-b1">
+          <div class="lab">WHAT THIS IS</div>
+          <div class="txt">A final reminder from Northfield Water.</div>
+        </div>
+        <div class="demo-block" id="demo-b2">
+          <div class="lab">WHAT THEY WANT</div>
+          <div class="txt"><b>&pound;84.20</b>, for water from 1 March to 31 May 2026.</div>
+        </div>
+        <div class="demo-block" id="demo-b3">
+          <div class="lab">BY WHEN</div>
+          <div class="txt"><b>14 December 2026.</b></div>
+        </div>
+        <div class="demo-block" id="demo-b4">
+          <div class="lab">IF YOU DO NOTHING</div>
+          <div class="txt">
+            A &pound;15.00 late fee is added and the debt may go to a collection agency.
+          </div>
+        </div>
+        <div class="demo-block" id="demo-b5">
+          <div class="lab">WHAT I'D DO</div>
+          <div class="txt">
+            1. Check whether you have already paid.<br />
+            2. Can't pay it all? Call them about a plan.
+          </div>
+        </div>
+        <div id="demo-proof">Every fact comes from your letter.</div>
+      </div>
+    </div>
+
+    <div id="demo-end" class="clip" data-start="12.3" data-duration="3.7" data-track-index="5">
+      <div id="demo-end-inner">
+        <div id="demo-end-name">paperwork</div>
+        <div id="demo-end-line">Plain answers for letters, bills, contracts and forms.</div>
+        <div id="demo-end-sub">Free. Works with the AI assistant you already use.</div>
+        <div id="demo-end-url">github.com/mvplab-ai/paperwork</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const out = "power3.out";
+
+    // the letter lands
+    // the letter is on screen from the first frame (it is the README thumbnail) and settles
+    tl.fromTo(
+      "#demo-sheet",
+      { y: 26, rotation: -2.4 },
+      { y: 0, rotation: -1.2, duration: 0.9, ease: out },
+      0,
+    );
+
+    // the question
+    tl.fromTo(
+      "#demo-ask",
+      { opacity: 0, y: 24, scale: 0.94 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "back.out(1.6)" },
+      1.3,
+    );
+
+    // each block of the answer, with the line of the letter it came from
+    const steps = [
+      ["#demo-b1", null, 2.3],
+      ["#demo-b2", "#demo-hl-amount", 3.5],
+      ["#demo-b3", "#demo-hl-date", 4.7],
+      ["#demo-b4", "#demo-hl-fee", 5.9],
+      ["#demo-b5", "#demo-hl-plan", 7.2],
+    ];
+    steps.forEach(([block, mark, at]) => {
+      tl.fromTo(
+        block,
+        { opacity: 0, y: 22 },
+        { opacity: 1, y: 0, duration: 0.4, ease: out },
+        at,
+      );
+      if (mark) {
+        tl.fromTo(
+          mark,
+          { backgroundSize: "0% 82%" },
+          { backgroundSize: "100% 82%", duration: 0.5, ease: "power2.inOut" },
+          at + 0.1,
+        );
+      }
+    });
+
+    tl.fromTo(
+      "#demo-proof",
+      { opacity: 0, scale: 0.92 },
+      { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" },
+      9.6,
+    );
+
+    // end card
+    tl.fromTo("#demo-end-inner", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 12.3);
+    tl.fromTo(
+      ["#demo-end-name", "#demo-end-line", "#demo-end-sub", "#demo-end-url"],
+      { opacity: 0, y: 26 },
+      { opacity: 1, y: 0, duration: 0.5, ease: out, stagger: 0.14 },
+      12.55,
+    );
+    tl.to({}, { duration: 0.01 }, 15.98);
+
+    window.__timelines["demo"] = tl;
+  </script>
+</template>
